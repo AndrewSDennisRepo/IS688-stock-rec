@@ -8,7 +8,6 @@ with open(r'E:\IS688\stock-recommender\baseline_price.json', 'r') as f:
     js = json.load(f)
 
 
-print(len(js))
 new_set = []
 
 for item  in js:
@@ -26,56 +25,77 @@ for item  in js:
 
 stock =pd.DataFrame(new_set)
 
-with open(r'E:\IS688\stock-recommender\bets_data.json', 'r') as f:
+with open(r'E:\IS688\stock-recommender\baseline_financials.json', 'r') as f:
     js = json.load(f)
 
 
-# new_set = []
+new_set = []
 
-# for item  in js:
-#     frame = {}
-#     key = list(item.keys())[0]
-#     value = list(item.values())[0]
-#     frame['stonk'] = key
-#     frame['shortRatio'] = value[0]
-#     frame['entToRev'] = value[1]
-#     frame['profitMargin'] = value[2]
-#     frame['enterpriseToEbitda'] = value[3]
-#     frame['revenueQuarterlyGrowth'] = value[4]
-#     frame['sharesShortPreviousMonthDate'] = value[5]
-#     frame['enterpriseValue'] = value[6]
-#     frame['sharesShort'] = value[7]
-#     frame['fiftyTwoWeekLow'] = value[8]
-#     new_set.append(frame)
+for item  in js:
+    frame = {}
+    key = list(item.keys())[0]
+    value = list(item.values())[0]
+    frame['stonk'] = key
+    frame['shortRatio'] = value[0]
+    frame['entToRev'] = value[1]
+    frame['profitMargin'] = value[2]
+    frame['enterpriseToEbitda'] = value[3]
+    frame['revenueQuarterlyGrowth'] = value[4]
+    frame['sharesShortPreviousMonthDate'] = value[5]
+    frame['enterpriseValue'] = value[6]
+    frame['sharesShort'] = value[7]
+    frame['fiftyTwoWeekLow'] = value[8]
+    new_set.append(frame)
 
-# finance =pd.DataFrame(new_set)
+finance =pd.DataFrame(new_set)
 
-# df = finance.merge(stock, on='stonk', how='left')
-
-
-# df.fillna(0, inplace=True)
-# print(df)
-
-# from sklearn.cluster import DBSCAN
-# from sklearn.preprocessing import StandardScaler
-
-# X = df.drop(columns=['stonk'])
-
-# scaler = StandardScaler()
-
-# X = scaler.fit_transform(X)
+df = finance.merge(stock, on='stonk', how='left')
 
 
-# db = DBSCAN(eps=1.1, min_samples=2).fit(X)
+df.fillna(0, inplace=True)
+print(df)
+# new_set= []
+# for x in js:
+#     if len(x['stonks']) > 1:
+#         new_set.append(x)
 
-# df['labels'] =db.labels_
-# from collections import Counter
-# print(Counter(db.labels_))
+# print(len(new_set))
+
+# main = pd.read_csv(r'E:\IS688\stock-recommender\baseline_dataframe.csv')
+
+# finance = pd.DataFrame(new_set)
+
+
+# main_df = main.merge(finance, on='stonk', how='left').dropna()
+
+
+
+
+# text = vectorizer_transform(main_df['text'], 'descriptions_vectors.pickle')
+
+# print(main_df)
+
+
+from sklearn.cluster import DBSCAN
+from sklearn.preprocessing import StandardScaler
+
+X = df.drop(columns=['stonk'])
+
+scaler = StandardScaler()
+
+X = scaler.fit_transform(X)
+
+
+db = DBSCAN(eps=1.1, min_samples=2).fit(X)
+
+df['labels'] =db.labels_
+from collections import Counter
+print(Counter(db.labels_))
 
 # df = df[df['stonk'] == 'NOK']
-# print(df[['stonk', 'labels']])
+print(df[['stonk', 'labels']])
 
-# df.to_csv('baseline_financial_data.csv', index=False)
+df.to_csv('baseline_financial_data.csv', index=False)
 # print(new_set[0].keys())
 
 # df_builder = []
@@ -118,16 +138,17 @@ with open(r'E:\IS688\stock-recommender\bets_data.json', 'r') as f:
 
 
 
-stonks = set()
+# stonks = set()
 
-for i in js:
-    for x in i['stonks']:
-        # for s in x['stonks']:
-        stonks.add(x)
+# new_list = []
+# for i in js:
+#     for x in i['stonks']:
+#         # for s in x['stonks']:
+#         stonks.add(x)
 
 # print(len(stonks))
 
-print(len(stonks))
+# # print(stonks)
 
 # price_base = []
 # company_des = []
@@ -146,13 +167,13 @@ print(len(stonks))
 #     i = i + 1
 
 
-# with open(r'E:\IS688\stock-recommender\baseline_price2.json', 'w') as f:
+# with open(r'E:\IS688\stock-recommender\baseline_price.json', 'w') as f:
 #     f.write(json.dumps(price_base))
 
-# with open(r'E:\IS688\stock-recommender\baseline_des2.json', 'w') as f:
+# with open(r'E:\IS688\stock-recommender\baseline_des.json', 'w') as f:
 #     f.write(json.dumps(company_des))
 
-# with open(r'E:\IS688\stock-recommender\baseline_financials2.json', 'w') as f:
+# with open(r'E:\IS688\stock-recommender\baseline_financials.json', 'w') as f:
 #     f.write(json.dumps(company_fin))
 
 
